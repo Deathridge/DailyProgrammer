@@ -1,10 +1,12 @@
 import math, random, string
 
+#Calculate hamming distance between two strings as a fitness function
 def hammingDistance(s1, s2):
     if len(s1) != len(s2):
         raise ValueError("Strings not equal length")
     return sum(bool(ord(ch1) - ord(ch2)) for ch1, ch2 in zip(s1,s2))
-    
+
+#Base mutation rate on length of the goal string, loop evolution while the goal isnt reached.    
 def begin():
    
     goal = 'The end of the world as we know it!'
@@ -16,8 +18,8 @@ def begin():
         text = evolve(text, previous, goal, rate )
         generation += 1
         print(text, generation)
-    
-    
+
+#Use previous and current string to create a 50/50 split child and then mutate
 def mutate(text,previous, rate):
     textLength = len(text)
     textList = list(text)
@@ -35,6 +37,7 @@ def mutate(text,previous, rate):
 
     return "".join(textList)
 
+#Generate 100 mutations and compare for fitness, return the fittest.
 def evolve(text, previous, goal, rate):
     #evolutionDictionary = {text: hammingDistance(text,goal)}
     evolutionDictionary = {}
