@@ -14,6 +14,7 @@ class Node:
 
 def successors(currentNode, nodes):
     """ Assumes that the nodes will be a dictionary containing a list of successor nodes"""
+    
     successors = nodes[currentNode.value]
     return successors
     
@@ -22,7 +23,7 @@ def manhattan(current, successor):
     x2 = successor.x
     y1 = current.y
     y2 = successor.y
-    return math.sqrt((x1-x2)**2 + (y1-y2)**2)
+    return (abs(x1-x2) + abs(y1-y2))/2
 
 def gridtoNodes(grid):
     nodeChildren = {}
@@ -30,16 +31,16 @@ def gridtoNodes(grid):
         for column in range(0,len(grid[0])):
             nodeChildren[grid[row][column]] = []
             if row-1 >= 0:
-                rm1 = Node(row-1, column, grid[row-1][column])
+                rm1 = Node(column +1,row-1 +1,  grid[row-1][column])
                 nodeChildren[grid[row][column]].append(rm1)
             if column-1 >= 0:
-                cm1 = Node(row, column-1, grid[row][column-1])
+                cm1 = Node(column-1 +1,row+1,  grid[row][column-1])
                 nodeChildren[grid[row][column]].append(cm1)
             if row + 1 < len(grid):
-                rp1 = Node(row+1, column, grid[row+1][column])
+                rp1 = Node(column+1,row+1 +1,  grid[row+1][column])
                 nodeChildren[grid[row][column]].append(rp1)
             if column + 1 < len(grid[0]):
-                cp1 = Node(row, column+1, grid[row][column+1])
+                cp1 = Node(column+1 +1,row +1,  grid[row][column+1])
                 nodeChildren[grid[row][column]].append(cp1)            
              
     return nodeChildren
@@ -50,7 +51,7 @@ def AStar(start, goal, nodes):
     openList = set()
     closed = set()
 
-    openList.add(start)
+    openList.add(start)    
     while openList:
         current = min(openList, key=lambda o: o.g + o.h)
 
@@ -98,6 +99,6 @@ sI = [Node(3,2,'H')]
 nodes = {'A':sA, 'B':sB, 'C':sC,'D':sD,'E':sE,'F':sF, 'G':sG, 'H':sH, 'I':sI}
 
 
-grid = [[4,6,2,14],[15,8,13,1],[10,5,9,12],[7,11,16,3]]
+
 
 
