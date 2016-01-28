@@ -24,6 +24,28 @@ def manhattan(current, successor):
     y2 = successor.y
     return math.sqrt((x1-x2)**2 + (y1-y2)**2)
 
+def gridtoNodes(grid):
+    nodeChildren = {}
+    for row in range(0, len(grid)):
+        for column in range(0,len(grid[0])):
+            nodeChildren[grid[row][column]] = []
+            if row-1 >= 0:
+                rm1 = Node(row-1, column, grid[row-1][column])
+                nodeChildren[grid[row][column]].append(rm1)
+            if column-1 >= 0:
+                cm1 = Node(row, column-1, grid[row][column-1])
+                nodeChildren[grid[row][column]].append(cm1)
+            if row + 1 < len(grid):
+                rp1 = Node(row+1, column, grid[row+1][column])
+                nodeChildren[grid[row][column]].append(rp1)
+            if column + 1 < len(grid[0]):
+                cp1 = Node(row, column+1, grid[row][column+1])
+                nodeChildren[grid[row][column]].append(cp1)            
+             
+    return nodeChildren
+            
+
+    
 def AStar(start, goal, nodes):
     openList = set()
     closed = set()
@@ -35,29 +57,30 @@ def AStar(start, goal, nodes):
         if current.value == goal.value:
             pathTaken = []
             while current.parent:
+                
                 pathTaken.append(current)
                 current = current.parent
+           
             pathTaken.append(current)
             
             return pathTaken[::-1]
         
         successorList = successors(current,nodes)
+        
         for successor in successorList:
-            successor.g = current.g + current.cost(successor)
-            successor.h = manhattan(goal, successor)
-            successor.parent = current
-            addSuccessor = True
-            
-            for node in openList:
-                if node.x is successor.x and node.y is successor.y:
-                    if (node.g + node.h) < (successor.g + successor.h):
-                        addSuccessor = False
-            for node in closed:
-                if node.x is successor.x and node.y is successor.y:
-                    if (node.g + node.h) < (successor.g + successor.h):
-                        addSuccessor = False
-            if addSuccessor:
+            if successor in closed:
+                continue
+            tentativeg = current.g + current.cost(successor)
+            if successor not in openList:
                 openList.add(successor)
+
+            elif tentativeg >= successor.g:
+                continue
+            
+            successor.g = tentativeg
+            successor.h = manhattan(goal, successor)          
+            successor.parent = current
+            
         openList.remove(current)
         closed.add(current)
     raise ValueError('No path was found')
@@ -73,3 +96,8 @@ sH = [Node(3,1,'G')]
 sI = [Node(3,2,'H')]
 
 nodes = {'A':sA, 'B':sB, 'C':sC,'D':sD,'E':sE,'F':sF, 'G':sG, 'H':sH, 'I':sI}
+
+
+grid = [[4,6,2,14],[15,8,13,1],[10,5,9,12],[7,11,16,3]]
+
+
