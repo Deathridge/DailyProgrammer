@@ -43,7 +43,7 @@ def fullRows(row):
     sumColumn = columnSummer(column)
     for row in range(0, len(sumRow)):
         if sumRow[row] == len(sumColumn):
-            fullRows.append(row+1)
+            fullRows.append(row)
     return fullRows
 
 def fullColumns(column):
@@ -52,7 +52,7 @@ def fullColumns(column):
     sumColumn = columnSummer(column)
     for column in range(0, len(sumColumn)):
         if sumColumn[column] == len(sumRow):
-            fullColumns.append(column+1)
+            fullColumns.append(column)
     return fullColumns
 
 
@@ -66,7 +66,12 @@ def solver(row, column):
 
     for column in fullColumn:
         for rowNum in range(0, len(row)):
+            print(rowNum,column)
             solutionGrid[rowNum][column] = '*'
+
+    for row in fullRow:
+        for colNum in range(0, len(column[0])):
+            solutionGrid[row][colNum] = '*'
         
     print(fullColumn)
     print(fullRow)
