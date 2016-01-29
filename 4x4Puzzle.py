@@ -1,5 +1,5 @@
-import AStar
-from AStar import Node, gridtoNodes, AStar
+import aStar
+from aStar import Node, gridToNodes, aStar
 
 def move(movingNode, swappingNode, childGrid, grid):
     movingNodeOriginal = movingNode.value
@@ -16,34 +16,15 @@ def move(movingNode, swappingNode, childGrid, grid):
                     if [row,column] is not originalmovingNode:
                         grid[row][column] = movingNodeOriginal
     print(grid)
-    
-    originx = movingNode.x
-    originy = movingNode.y
-
-    movingNode.x = swappingNode.x
-    movingNode.y = swappingNode.y
-    swappingNode.x = originx
-    swappingNode.y = originy
-
-    movingNodeChildren = childGrid[movingNode.value]
-    childGrid[movingNode.value] = childGrid[swappingNode.value]
-    childGrid[swappingNode.value] = movingNodeChildren
-
-    for node in childGrid[movingNode.value]:
-        if node.value is movingNode.value:
-            node.value = swappingNode.value
-    for node in childGrid[swappingNode.value]:
-        if node.value is swappingNode.value:
-            node.value = movingNode.value
-
+    childGrid = gridToNodes(grid)
     
     
     return [childGrid, grid]
 
 grid = [[4,6,2,14],[15,8,13,1],[10,5,9,12],[7,11,16,3]]
-
+grid2 = [[1, 2, 3, 4], [15, 6, 14, 8], [9, 10, 13, 12], [7, 11, 5, 16]]
 goalGrid = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
-newgrid = gridtoNodes(grid)
+newgrid = gridToNodes(grid)
 
 
 def getGoal(movingNode, grid, goalGrid):
@@ -56,13 +37,9 @@ def getGoal(movingNode, grid, goalGrid):
 
 def getNextmove(movingNode, nodeGrid):
     goalNode = getGoal(movingNode,grid,goalGrid)
-    nextSpot = AStar(movingNode, goalNode, newgrid)
-    
-    
-    if len(nextSpot) > 1:
-        return nextSpot[1]
-    else:
-        return nextSpot[0]
+    nextSpot = aStar(movingNode, goalNode, newgrid)
+
+    return nextSpot
 
 
 
@@ -77,14 +54,21 @@ def test(grid, goalGrid, newgrid):
         for row in range(0, len(grid)):
             for column in range(0, len(grid[row])):
             
-                nodeValue = grid[row][column]
-        
-                node = Node(row+1,column+1,nodeValue)
-                goal = getGoal(Node(column+1, row+1, nodeValue), grid, goalGrid)                        
-                   
-                nextSpot = getNextmove(node, newgrid)
+                nodeValue = (row+1)*(column+1)
                 
-                [newgrid, grid] = move(node, nextSpot, newgrid, grid)            
+                node = getLocation(nodeValue,grid)
+                goal = getGoal(node, grid, goalGrid)                        
+
+                if [node.x,node.y] != [goal.x,goal.y]:
+                    nextSpot = getNextmove(node, newgrid)
+                    
+                    for spot in nextSpot:
+                        print(nodeValue,spot.value)
+                        [newgrid, grid] = move(node, spot, newgrid, grid)                      
+            
+            
+               
+                    
                 
                 
             

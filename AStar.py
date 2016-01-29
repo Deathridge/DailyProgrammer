@@ -23,9 +23,9 @@ def manhattan(current, successor):
     x2 = successor.x
     y1 = current.y
     y2 = successor.y
-    return (abs(x1-x2) + abs(y1-y2))/2
+    return (abs(x1-x2) + abs(y1-y2))
 
-def gridtoNodes(grid):
+def gridToNodes(grid):
     nodeChildren = {}
     for row in range(0, len(grid)):
         for column in range(0,len(grid[0])):
@@ -47,7 +47,7 @@ def gridtoNodes(grid):
             
 
     
-def AStar(start, goal, nodes):
+def aStar(start, goal, nodes):
     openList = set()
     closed = set()
 
